@@ -18,6 +18,8 @@ public class Main {
 
         LinkedList<String> seats = new LinkedList<>();
 
+        int numSeat = 6;
+
         System.out.print("\tX");
         System.out.print("\t\t\tEvents");
         System.out.print("\t\t\t\t\t\t\tState of the Shop\n");
@@ -35,7 +37,7 @@ public class Main {
             if (containsSpace) {
                 int x = new Random().nextInt(4);
                 System.out.print(" " + x + " ---->   ");
-                if (seats.size() < 5 || x == 0) {
+                if (seats.size() < numSeat || x == 0) {
                     if (x == 0 && !seats.isEmpty() && !seats.getFirst().isEmpty()) {
                         String removedSeat = seats.pop();
                         System.out.print("  ( -- " + removedSeat + " )      ");
@@ -84,7 +86,7 @@ public class Main {
                         System.out.print("  " + seats.get(i) + " :");
                     }
                 }
-                for (int i = 0; i < 5 - seats.size(); i++) {
+                for (int i = 0; i < numSeat - seats.size(); i++) {
                     if (seats.size() == 0) {
                         if (i == 4) {
                             System.out.print("  ----  ");
