@@ -35,3 +35,6 @@ This Java program simulates the functioning of a barbering shop according to the
 ## Requirements
 
 - Java JDK installed.
+
+## Simulation
+![Barbering-Shop-Simulation.png](Barbering-Shop-Simulation.png)
