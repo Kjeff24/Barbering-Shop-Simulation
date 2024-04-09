@@ -1,74 +1,88 @@
 package org.example.barbering_shop;
 
+import org.example.client.Client;
+import org.example.client.ClientType;
+
 import java.util.LinkedList;
 
 public class BarberingShop implements BarberingShopInterface{
-    //Array to store number of clients that came to the barbering shop
-    private final int[] eventCount;
+    private int vipClientCount = 0;
+    private int ordClientCount = 0;
+    private final LinkedList<String> shopSeats = new LinkedList<>();
+    private final int totalShopSeats = 6;
 
-    // List to store the seat information
-    private final LinkedList<String> seats;
+    public void addClientToSeat(int eventNumber) {
+        ClientType clientType = (eventNumber == 1) ? ClientType.VIP : ClientType.ORD;
+        int clientNumber = (eventNumber == 1) ? ++vipClientCount : ++ordClientCount;
+        Client client = new Client(clientType, clientNumber);
 
-    // Total number of seats available
-    private final int numSeat;
+        if (eventNumber == 1 && shopSeats.size() > 1 && shopSeats.get(1).contains(ClientType.ORD.name())){
+            shopSeats.add(1, String.valueOf(client));
 
-    public BarberingShop() {
-        this.eventCount = new int[2];
-        this.seats = new LinkedList<>();
-        this.numSeat = 6;
-    }
-
-    // Method to handle adding new events (VIP or ORD) to seats list
-    @Override
-    public void addClientToSeat(int eventType) {
-        eventCount[eventType-1]++;
-        String prefix = (eventType == 1) ? "VIP" : "ORD";
-        String eventTypeStr = prefix + eventCount[eventType-1];
-
-        // Add the new client type to seats list based on its type and existing clients
-        if (eventType == 1 && seats.size() > 1 && seats.get(1).contains("ORD")){
-            seats.add(1, eventTypeStr);
-
-        } else if (eventType == 1 && seats.size() > 1 && seats.get(1).contains("VIP")) {
-            int index = findInsertionIndex(seats, eventType);
-            seats.add(index +1, eventTypeStr);
+        } else if (eventNumber == 1 && shopSeats.size() > 1 && shopSeats.get(1).contains(ClientType.VIP.name())) {
+            int index = findLastVIPClientIndex(shopSeats);
+            shopSeats.add(index +1, String.valueOf(client));
 
         }else {
-            seats.add(eventTypeStr);
+            shopSeats.add(String.valueOf(client));
         }
-        System.out.print("  ( ++ " + eventTypeStr + " )"); // Print event addition message
+        System.out.print("  ( ++ " + client + " )");
 
     }
 
-    // Method to handle null events (no client to remove from seat or seats are full)
-    @Override
-    public void handleNoClientOrFullSeat(int eventType) {
-
-        // Print appropriate message based on the event type
-        System.out.print(eventType == 0 ? "  ( ** NULL )" : eventType == 1 ? "  ( +- VIP" + (++eventCount[0]) + " )" : "  ( +- ORD" + (++eventCount[1]) + " )");
+    public void handleEmptySeatOrFullShop(int eventNumber) {
+        switch(eventNumber) {
+            case 0:
+                System.out.print("  ( ** NULL )");
+                break;
+            case 1:
+                ++vipClientCount;
+                System.out.print("  ( +- VIP" + vipClientCount + " )");
+                --vipClientCount;
+                break;
+            default:
+                ++ordClientCount;
+                System.out.print("  ( +- ORD" + ordClientCount + " )");
+                --ordClientCount;
+        }
     }
 
-    @Override
     public void removeClientFromSeat() {
-        String removedSeat = seats.pop();
+        String removedSeat = shopSeats.pop();
         System.out.print("  ( -- " + removedSeat + " )");
     }
 
-    // Method to find the last index position of a VIP to insert the new VIP into seats list
-    private int findInsertionIndex(LinkedList<String> seats, int eventType) {
-        for (int i = seats.size() - 1; i >= 0; i--) {
-            if (seats.get(i).contains("VIP")) {
+    public void displayShopSeats() {
+        System.out.print("\t\t[");
+        for (int i = 0; i < totalShopSeats; i++) {
+            System.out.print("  " + (i < shopSeats.size() ? shopSeats.get(i) : "----"));
+            System.out.print(i < totalShopSeats - 1 ? " :" : "");
+        }
+        System.out.print(" ]");
+    }
+
+    /**
+     * This method determines the last index position of a VIP client in the seats.
+     * It iterates over the seats from the end to the start and returns the index of the last VIP client found.
+     * If no VIP client is found, it returns the size of the seats.
+     *
+     * @param shopSeats A LinkedList representing the seats in the barbering shop.
+     * @return The index of the last VIP client in the seats, or the size of the seats if no VIP client is found.
+     */
+    private int findLastVIPClientIndex(LinkedList<String> shopSeats) {
+        for (int i = shopSeats.size() - 1; i >= 0; i--) {
+            if (shopSeats.get(i).contains(ClientType.VIP.name())) {
                 return i;
             }
         }
-        return seats.size(); // Return the end of the list if no VIP event found
+        return shopSeats.size();
     }
 
-    public LinkedList<String> getSeats() {
-        return seats;
+    public LinkedList<String> getShopSeats() {
+        return shopSeats;
     }
 
-    public int getNumSeat() {
-        return numSeat;
+    public int getTotalShopSeats() {
+        return totalShopSeats;
     }
 }

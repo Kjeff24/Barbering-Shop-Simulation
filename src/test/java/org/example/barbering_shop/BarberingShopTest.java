@@ -22,7 +22,7 @@ class BarberingShopTest {
         barberingShop.addClientToSeat(1);
         barberingShop.addClientToSeat(2);
 
-        LinkedList<String> seats = barberingShop.getSeats();
+        LinkedList<String> seats = barberingShop.getShopSeats();
 
         assertEquals("VIP1", seats.get(0));
         assertEquals("VIP2", seats.get(1));
@@ -33,10 +33,10 @@ class BarberingShopTest {
     void removeClientFromSeat() {
         // Add a VIP client
         barberingShop.addClientToSeat(1);
-        assertEquals("VIP1", barberingShop.getSeats().getFirst());
+        assertEquals("VIP1", barberingShop.getShopSeats().getFirst());
 
         // Remove the VIP client
         barberingShop.removeClientFromSeat();
-        assertTrue(barberingShop.getSeats().isEmpty());
+        assertTrue(barberingShop.getShopSeats().isEmpty());
     }
 }
