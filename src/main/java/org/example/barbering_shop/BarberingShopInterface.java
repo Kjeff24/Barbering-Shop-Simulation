@@ -1,32 +1,32 @@
 package org.example.barbering_shop;
 
+import org.example.client.Client;
+import org.example.client.ClientType;
+
 public interface BarberingShopInterface {
-    /**
-     * This method is used to add a client to a specific seat in the barbering shop.
-     * The type of client (VIP or Ordinary) is determined by the eventNumber parameter.
-     *
-     * @param eventNumber eventNumber An integer representing the type of client.
-     *                    1 represents a VIP client and 2 represents an
-     */
-    void addClientToSeat(int eventNumber);
 
     /**
-     * This method is used to handle the situation when there is no client or the shop is full.
-     * The action taken depends on the eventNumber parameter.
+     * This method is used to add a client to a seat in the barbering shop.
      *
-     * @param eventNumber eventNumber An integer representing the type of event.
+     * @param clientType The type of client to be added.
+     * @return Client The newly added client
      */
-    void handleEmptySeatOrFullShop(int eventNumber);
+    Client addClientToSeat(ClientType clientType);
+
+    /**
+     * This method is used to manage the availability of seats, whether all seats are full or empty.
+     * @param clientType The type of the client for which the seats availability is to be managed.
+     */
+    void manageSeatsAvailability(ClientType clientType);
 
     /**
      * This method is used to remove a client from a seat in the barbering shop.
-     * The client removed is always the one on the main seat at index 0.
+     * @return Client The client that was removed from the seat.
      */
-    void removeClientFromSeat();
+    Client removeClientFromSeat();
 
     /**
      * This method is used to display the current state of the seats in the barbering shop.
-     * It prints out a visual representation of the seats, with each seat showing whether it's empty or occupied by a VIP or Ordinary client.
      */
     void displayShopSeats();
 }

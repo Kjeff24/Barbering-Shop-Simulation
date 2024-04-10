@@ -1,8 +1,9 @@
 package org.example;
 
 import org.example.barbering_shop.BarberingShop;
+import org.example.client.Client;
+import org.example.client.ClientType;
 
-import java.util.LinkedList;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -27,14 +28,24 @@ public class Main {
         int simulationCount = 0;
         while (simulationCount++ < MAX_SIMULATIONS && scanner.nextLine().equals(" ")) {
             int eventNumber = generateRandomNumber();
+            int totalShopSeats = barberingShop.getTotalShopSeats();
+            int totalClientSeated = barberingShop.getSeatedClients().size();
             System.out.print(" " + eventNumber + " ---->   ");
-            if (eventNumber == 0 && !barberingShop.getShopSeats().isEmpty()) {
-                barberingShop.removeClientFromSeat();
-            } else if ((eventNumber == 1 || eventNumber == 2 || eventNumber == 3) && barberingShop.getShopSeats().size() < barberingShop.getTotalShopSeats()) {
-                int newEventNumber = eventNumber > 1 ? 2 : 1;
-                barberingShop.addClientToSeat(newEventNumber);
+            if (eventNumber == 0 && totalClientSeated > 0) {
+                Client client = barberingShop.removeClientFromSeat();
+                System.out.print("  ( -- " + client + " )");
+            } else if (eventNumber > 0 && totalClientSeated < totalShopSeats) {
+                ClientType clientType = (eventNumber == 1) ? ClientType.VIP : ClientType.ORD;
+                Client client = barberingShop.addClientToSeat(clientType);
+                System.out.print("  ( ++ " + client + " )");
             } else {
-                barberingShop.handleEmptySeatOrFullShop(eventNumber);
+                if(eventNumber == 0){
+                    System.out.print("  ( ** NULL )");
+                } else {
+                    ClientType clientType = eventNumber == 1 ? ClientType.VIP : ClientType.ORD;
+                    barberingShop.manageSeatsAvailability(clientType);
+
+                }
             }
 
             barberingShop.displayShopSeats();

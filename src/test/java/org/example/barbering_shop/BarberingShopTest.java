@@ -1,5 +1,7 @@
 package org.example.barbering_shop;
 
+import org.example.client.Client;
+import org.example.client.ClientType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -17,26 +19,33 @@ class BarberingShopTest {
     }
 
     @Test
-    public void testAddClientToSeat(){
-        barberingShop.addClientToSeat(1);
-        barberingShop.addClientToSeat(1);
-        barberingShop.addClientToSeat(2);
+    void addClientToSeat() {
+        Client vipClient = barberingShop.addClientToSeat(ClientType.VIP);
+        assertTrue(barberingShop.getSeatedClients().contains(vipClient));
+        assertEquals(1, barberingShop.getSeatedClients().size());
 
-        LinkedList<String> seats = barberingShop.getShopSeats();
-
-        assertEquals("VIP1", seats.get(0));
-        assertEquals("VIP2", seats.get(1));
-        assertEquals("ORD1", seats.get(2));
+        Client ordClient = barberingShop.addClientToSeat(ClientType.ORD);
+        assertTrue(barberingShop.getSeatedClients().contains(ordClient));
+        assertEquals(2, barberingShop.getSeatedClients().size());
     }
 
     @Test
     void removeClientFromSeat() {
-        // Add a VIP client
-        barberingShop.addClientToSeat(1);
-        assertEquals("VIP1", barberingShop.getShopSeats().getFirst());
+        Client vipClient = barberingShop.addClientToSeat(ClientType.VIP);
+        Client removedClient = barberingShop.removeClientFromSeat();
+        assertEquals(vipClient, removedClient);
+    }
 
-        // Remove the VIP client
-        barberingShop.removeClientFromSeat();
-        assertTrue(barberingShop.getShopSeats().isEmpty());
+    @Test
+    void getTotalShopSeats() {
+        assertEquals(6, barberingShop.getTotalShopSeats());
+    }
+
+    @Test
+    void getSeatedClients() {
+        barberingShop.addClientToSeat(ClientType.VIP);
+        LinkedList<Client> seatedClients = barberingShop.getSeatedClients();
+        assertEquals(1, seatedClients.size());
+        assertEquals(ClientType.VIP, seatedClients.get(0).clientType());
     }
 }
