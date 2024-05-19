@@ -26,6 +26,13 @@ within the shop.
 ## Usage
 
 1. Run the program.
+```
+./mvnw spring-boot:run
+```
+or if you have maven installed
+```
+mvn spring-boot:run
+```
 2. Press the space key to trigger an event.
 3. The program will display the event along with the sitting order of clients in the shop.
 
